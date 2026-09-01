@@ -1,3 +1,4 @@
+import 'package:clock_app/common/logic/show_select.dart';
 import 'package:clock_app/common/types/select_choice.dart';
 import 'package:clock_app/common/widgets/fields/select_field/option_cards/text_option_card.dart';
 import 'package:clock_app/common/widgets/fields/select_field/select_field.dart';
@@ -132,6 +133,43 @@ void main() {
           //   }
           // });
         });
+        testWidgets('keeps multi-select state after rotation', (tester) async {
+          List<int> selectedIndices = <int>[];
+          tester.view.physicalSize = const Size(1080, 1920);
+          tester.view.devicePixelRatio = 1.0;
+          addTearDown(tester.view.resetPhysicalSize);
+          addTearDown(tester.view.resetDevicePixelRatio);
+
+          await _renderMultiSelectLauncher(
+            tester,
+            getSelectedIndices: () => selectedIndices,
+            onChanged: (indices) => selectedIndices = indices,
+          );
+          await tester.tap(find.text('Open multi-select'));
+          await tester.pumpAndSettle();
+          await tester.tap(find.byIcon(Icons.select_all_rounded));
+          await tester.pumpAndSettle();
+
+          expect(selectedIndices, isEmpty);
+          final checkboxFinder = find.byType(Checkbox);
+          expect(checkboxFinder, findsNWidgets(choices.length));
+          for (final checkbox in tester.widgetList<Checkbox>(checkboxFinder)) {
+            expect(checkbox.value, isTrue);
+          }
+
+          tester.view.physicalSize = const Size(1920, 1080);
+          await tester.pumpAndSettle();
+
+          expect(selectedIndices, isEmpty);
+          expect(checkboxFinder, findsNWidgets(choices.length));
+          for (final checkbox in tester.widgetList<Checkbox>(checkboxFinder)) {
+            expect(checkbox.value, isTrue);
+          }
+
+          await tester.tap(find.text('Save'));
+          await tester.pumpAndSettle();
+          expect(selectedIndices, [0, 1, 2]);
+        });
       });
     });
   });
@@ -150,6 +188,40 @@ Future<void> _renderWidget(WidgetTester tester,
           title: title,
           getChoices: () => choices,
           onChanged: onChanged ?? (_) {},
+        ),
+      ),
+    ),
+  );
+}
+
+Future<void> _renderMultiSelectLauncher(
+  WidgetTester tester, {
+  required List<int> Function() getSelectedIndices,
+  required void Function(List<int>) onChanged,
+}) async {
+  await tester.pumpWidget(
+    MaterialApp(
+      locale: const Locale('en'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Builder(
+        builder: (context) => Scaffold(
+          body: TextButton(
+            onPressed: () => showSelectBottomSheet(
+              context,
+              (indices) {
+                if (indices != null) {
+                  onChanged(indices);
+                }
+              },
+              multiSelect: true,
+              title: title,
+              description: null,
+              getChoices: () => choices,
+              getCurrentSelectedIndices: getSelectedIndices,
+            ),
+            child: const Text('Open multi-select'),
+          ),
         ),
       ),
     ),

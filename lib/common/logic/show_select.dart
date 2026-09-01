@@ -15,14 +15,14 @@ Future<void> showSelectBottomSheet(
   List<MenuAction> actions = const [],
 }) async {
   List<int>? selectedIndices;
+  List<int> currentSelectedIndices = List.of(getCurrentSelectedIndices());
+  List<SelectChoice> choices = getChoices();
 
   await showModalBottomSheet<List<int>>(
     context: context,
     isScrollControlled: true,
     enableDrag: true,
     builder: (BuildContext context) {
-      List<int> currentSelectedIndices = getCurrentSelectedIndices();
-      List<SelectChoice> choices = getChoices();
       return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
           void handleSelect(List<int> indices) {
@@ -35,7 +35,7 @@ Future<void> showSelectBottomSheet(
                     currentSelectedIndices.add(indices[0]);
                   }
                 } else {
-                  currentSelectedIndices = indices;
+                  currentSelectedIndices = List.of(indices);
                 }
               } else {
                 if (indices.length == 1) {
@@ -61,7 +61,7 @@ Future<void> showSelectBottomSheet(
             actions: actions,
             reload: () => setState(() {
               choices = getChoices();
-              currentSelectedIndices = getCurrentSelectedIndices();
+              currentSelectedIndices = List.of(getCurrentSelectedIndices());
             }),
           );
         },
