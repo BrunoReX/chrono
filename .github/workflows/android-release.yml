@@ -38,9 +38,6 @@ jobs:
       - name: Load key
         run: echo "${{ secrets.KEYSTORE_JKS_RELEASE }}" | base64 --decode > android/app/release-key.jks
 
-      - name: Extract version from tag
-        uses: damienaicheh/extract-version-from-tag-action@v1.1.0
-
       - name: Turn off analytics
         run: flutter config --no-analytics
 
