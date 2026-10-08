@@ -46,12 +46,12 @@ jobs:
 
       - name: Create key.properties
         run: |
-          echo keyPassword=\${{ secrets.KEY_PASSWORD }} > ./android/key.properties
-          echo storePassword=\${{ secrets.KEY_STORE_PASSWORD }} >> ./android/key.properties
-          echo keyAlias=\${{ secrets.KEY_ALIAS }} >> ./android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" > ./android/key.properties
+          echo "storePassword=${{ secrets.KEY_STORE_PASSWORD }}" >> ./android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> ./android/key.properties
 
       - name: Load key
-        run: echo "${{ secrets.KEYSTORE_JKS_RELEASE }}" | base64 --decode > android/app/release-key.jks
+        run: echo "${{ secrets.KEYSTORE_JKS_RELEASE }}" | base64 --decode --ignore-garbage > android/app/release-key.jks
 
       - name: Turn off analytics
         run: flutter config --no-analytics
