@@ -9,7 +9,7 @@ on:
 # 4
 jobs:
   build:
-    runs-on: Ubuntu2204
+    runs-on: ubuntu-22.04
     permissions: write-all
 
     steps:
