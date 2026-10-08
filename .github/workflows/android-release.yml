@@ -27,7 +27,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y wget unzip
           mkdir -p $HOME/android-sdk/cmdline-tools
           cd $HOME/android-sdk/cmdline-tools
-          wget https://google.com -O cmdline-tools.zip
+          wget https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip -O cmdline-tools.zip
           unzip cmdline-tools.zip && rm cmdline-tools.zip
           mv cmdline-tools latest
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
