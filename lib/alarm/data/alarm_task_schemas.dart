@@ -61,8 +61,8 @@ Map<AlarmTaskType, AlarmTaskSchema> alarmTaskSchemasMap = {
           (context) => AppLocalizations.of(context)!.retypeIncludeNumSetting,
           false),
       SwitchSetting(
-          "Include lowercase",
-          (context) => AppLocalizations.of(context)!.retypeLowercaseSetting,
+          "Include uppercase",
+          (context) => AppLocalizations.of(context)!.retypeUppercaseSetting,
           true),
       SliderSetting(
           "Number of problems",

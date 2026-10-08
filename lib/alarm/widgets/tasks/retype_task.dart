@@ -26,7 +26,7 @@ class _RetypeTaskState extends State<RetypeTask> {
 
   late int characterCount;
   late bool includeNumbers;
-  late bool includeLowercase;
+  late bool includeUppercase;
   late String _chars;
   late double _problemCount;
   int _problemsSolved = 0;
@@ -37,9 +37,9 @@ class _RetypeTaskState extends State<RetypeTask> {
     characterCount =
         widget.settings.getSetting("Number of characters").value.toInt();
     includeNumbers = widget.settings.getSetting("Include numbers").value;
-    includeLowercase = widget.settings.getSetting("Include lowercase").value;
+    includeUppercase = widget.settings.getSetting("Include uppercase").value;
     _chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ${includeLowercase ? "abcdefghijklmnopqrstuvwxyz" : ""}${includeNumbers ? "0123456789" : ""}";
+        "abcdefghijklmnopqrstuvwxyz${includeUppercase ? "ABCDEFGHIJKLMNOPQRSTUVWXYZ" : ""}${includeNumbers ? "0123456789" : ""}";
     _problemCount = widget.settings.getSetting("Number of problems").value;
     _problemsSolved = 0;
     string = _generateRandomString(characterCount);
