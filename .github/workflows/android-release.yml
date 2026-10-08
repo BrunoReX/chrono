@@ -6,7 +6,6 @@ on:
     - '*'
   workflow_dispatch:
 
-# 4
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -23,8 +22,21 @@ jobs:
           java-version: "17"
           # cache: 'gradle'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Install Android SDK & Command Line Tools
+        run: |
+          sudo apt-get update && sudo apt-get install -y wget unzip
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          cd $HOME/android-sdk/cmdline-tools
+          wget https://google.com -O cmdline-tools.zip
+          unzip cmdline-tools.zip && rm cmdline-tools.zip
+          mv cmdline-tools latest
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
+
+      - name: Accept Android Licenses
+        run: |
+          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
 
       - uses: subosito/flutter-action@v2
         with:
