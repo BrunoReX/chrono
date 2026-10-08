@@ -70,10 +70,21 @@ jobs:
       - name: Build APK
         run: flutter build apk --release --split-per-abi --flavor prod
 
+      - name: Save Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-build-outputs
+          path: |
+            build/app/outputs/bundle/prodRelease/*.aab
+            build/app/outputs/flutter-apk/*.apk
+
+      - name: set env
+        run: echo "::set-env name=NOW::$(date +'%Y%m%d%H%M%S')"
+
       - name: Create Github Release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/bundle/release/*.aab,build/app/outputs/flutter-apk/*.apk"
           body: "nothing"
           draft: true
-          tag: "faketag"
+          tag: ${{ env.NOW }}
